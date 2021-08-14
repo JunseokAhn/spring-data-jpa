@@ -6,34 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity @Data
+@Entity
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "name"})
-public class Member {
+public class Team {
 
     @Id
     @GeneratedValue
     @JoinColumn(name = "member_id")
     Long id;
     String name;
-    int age;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
+    List<Member> memberList = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    Team team;
-
-    public Member(String name) {
+    public Team(String name) {
         this.name = name;
     }
 
-    public Member(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public void changeTeam(Team team){
-        this.team = team;
-        team.memberList.add(this);
-    }
 }
