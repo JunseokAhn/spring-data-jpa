@@ -7,6 +7,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import springdatajpa.domain.Member;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -16,6 +17,8 @@ import static org.assertj.core.api.Assertions.*;
 @Rollback(false)
 class MemberRepositoryTest {
 
+    @Autowired
+    EntityManager em;
     @Autowired
     MemberRepository memberRepository;
 
@@ -37,6 +40,24 @@ class MemberRepositoryTest {
         assertThat(member2).isEqualTo(memberList.get(0));
     }
 
+
+    @Test
+    public void findByName2() {
+        Member member = new Member("memberA");
+        Member member2 = memberRepository.save(member);
+        List<Member> memberList = em.createNamedQuery("Member.findByName", Member.class)
+                .setParameter("name", "memberA").getResultList();
+        assertThat(memberList.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findName() {
+        Member member = new Member("memberA");
+        Member member2 = memberRepository.save(member);
+        List<Member> memberList = memberRepository.findName("memberA");
+        assertThat(memberList.size()).isEqualTo(1);
+    }
+
     @Test
     public void findByNameAndAgeGreaterThan() {
 
@@ -51,12 +72,24 @@ class MemberRepositoryTest {
     }
 
     @Test
+    public void findByNameAndAge() {
+        Member member = new Member("memberA", 10);
+        Member member2 = memberRepository.save(member);
+
+        Member member3 = new Member("memberA", 20);
+        Member member4 = memberRepository.save(member3);
+
+        List<Member> memberList = memberRepository.findByNameAndAge("memberA", 10);
+        assertThat(memberList.size()).isEqualTo(1);
+    }
+
+    @Test
     public void findAll() {
 
         Member member = new Member("memberA");
         Member member2 = memberRepository.save(member);
         List<Member> memberList = memberRepository.findAll();
-        assertThat(memberList).isEqualTo(1);
+        assertThat(memberList.size()).isEqualTo(1);
     }
 
 
@@ -67,4 +100,7 @@ class MemberRepositoryTest {
         long count = memberRepository.count();
         assertThat(count).isEqualTo(1);
     }
+
+
+
 }
