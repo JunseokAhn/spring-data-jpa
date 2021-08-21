@@ -1,4 +1,4 @@
-package springdatajpa.domain;
+package springDataJpa.domain;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class Member {
     String name;
     int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     Team team;
 

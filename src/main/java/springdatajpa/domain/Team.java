@@ -1,4 +1,4 @@
-package springdatajpa.domain;
+package springDataJpa.domain;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class Team {
     @JoinColumn(name = "member_id")
     Long id;
     String name;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     List<Member> memberList = new ArrayList<>();
 
     public Team(String name) {

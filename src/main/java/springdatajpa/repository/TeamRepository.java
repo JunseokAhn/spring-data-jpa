@@ -1,7 +1,7 @@
-package springdatajpa.repository;
+package springDataJpa.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import springdatajpa.domain.Team;
+import springDataJpa.domain.Team;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 }
