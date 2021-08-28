@@ -22,14 +22,13 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(false)
+@Rollback()
 class MemberRepositoryTest {
 
     @Autowired
     EntityManager em;
     @Autowired
     MemberRepository memberRepository;
-
     @Autowired
     TeamRepository teamRepository;
 
@@ -196,4 +195,54 @@ class MemberRepositoryTest {
         System.out.println("current page " + page3.getNumber());
 
     }
+
+    @Test
+    public void bulkPlus() throws Exception {
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 20));
+        memberRepository.save(new Member("member3", 30));
+        memberRepository.save(new Member("member4", 40));
+        memberRepository.save(new Member("member5", 50));
+
+        //when
+        int count = memberRepository.bulkAgePlus(30);
+        System.out.println("count : " + count);
+
+        //then
+        List<Member> memberList = memberRepository.findAll();
+        for (Member member : memberList) {
+            System.out.println(member.getAge());
+        }
+
+    }
+    
+    @Test
+    public void entityGraph() throws Exception {
+       
+        //given
+        Team team = new Team("teamA");
+        Team team2 = teamRepository.save(team);
+
+        Member member = new Member("memberA");
+        member.setTeam(team);
+        Member member2 = memberRepository.save(member);
+
+        Member member3 = new Member("memberA");
+        member3.setTeam(team);
+        Member member4 = memberRepository.save(member3);
+        
+        //when
+        List<Member> memberList = memberRepository.findGraphByName("memberA");
+
+        //then
+        for (Member m : memberList) {
+            System.out.println(m);
+            System.out.println("createdDate" + m.getCreatedDate());
+            System.out.println(m.getLastModifiedBy());
+            System.out.println(m.getCreatedDate2());
+        }
+        
+    }
+
 }

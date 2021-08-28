@@ -4,12 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import springDataJpa.domain.Member;
 import springDataJpa.dto.MemberDTO;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,4 +53,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query(value = "select m from Member m where age = :age")
     Slice<Member> findByAge3(@Param("age") int age, Pageable pageable);
+
+    // Modifying어노테이션을 붙이지않으면 조회쿼리로 인식해서 resultList가 호출됨
+    // Persistence context auto clear
+    @Modifying(clearAutomatically = true)
+    @Query("update Member m set m.age = m.age + 1 where m.age >= :age ")
+    int bulkAgePlus(@Param("age") int age);
+
+    //fetch join
+    @EntityGraph(attributePaths = "team")
+    List<Member> findGraphByName(String memberA);
+
 }

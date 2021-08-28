@@ -15,7 +15,7 @@ import javax.persistence.*;
         name = "Member.findByName",
         query = "select m from Member m where m.name = :name"
 )
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
