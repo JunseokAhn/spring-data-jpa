@@ -214,7 +214,6 @@ class MemberRepositoryTest {
         for (Member member : memberList) {
             System.out.println(member.getAge());
         }
-
     }
     
     @Test
@@ -240,7 +239,6 @@ class MemberRepositoryTest {
             System.out.println(m);
             System.out.println("createdDate" + m.getCreatedDate());
             System.out.println(m.getLastModifiedBy());
-            System.out.println(m.getCreatedDate2());
         }
         
     }

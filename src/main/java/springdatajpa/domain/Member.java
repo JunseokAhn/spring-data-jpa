@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 
@@ -19,7 +20,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @JoinColumn(name = "member_id")
+    @Column(name = "member_id")
     Long id;
     String name;
     int age;
